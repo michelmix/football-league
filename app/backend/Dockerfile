@@ -14,7 +14,7 @@ EXPOSE 3001
 # Copiar o restante dos arquivos da aplicação para o container
 ENTRYPOINT [ "npm", "run" ]
 
-CMD [ "dev" ]
+CMD [ "start" ]
 
 # Configurar os comandos para iniciar a aplicação de acordo com as boas práticas
 # Dica: Leia a seção Docker e Docker-compose no README para mais informações
