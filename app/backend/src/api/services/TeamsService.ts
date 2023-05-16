@@ -13,9 +13,9 @@ export default class TeamsService implements IServiceTeam {
     return allTeams;
   }
 
-  // async getById(id: number): Promise<ITeam> {
-  //   const team = await this.model.findByPk(id);
-  //   if (!team) throw new Error('Falha ao buscar time by id');
-  //   return team;
-  // }
+  async getById(id: number): Promise<ITeam> {
+    const team = await this.model.findByPk(id);
+    if (!team) throw new Error('Falha ao buscar time by id');
+    return team;
+  }
 }
