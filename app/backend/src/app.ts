@@ -1,10 +1,11 @@
 import * as express from 'express';
 import teamsRoutes from './api/routes/TeamsRoutes';
+import router from './api/routes';
 
 class App {
   public app: express.Express;
 
-  constructor() {
+  constructor(private routers = router) {
     this.app = express();
 
     this.config();
