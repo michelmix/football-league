@@ -3,9 +3,9 @@ import { hashSync, compareSync } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import IJwtPayload from '../interfaces/IJwt';
 import ILogin from '../interfaces/ILogin';
-import ApiError from '../utils/ApiError';
+import Error from '../../utils/Error';
+
 import UserModel from '../../models/UserModel';
-import User from '../../models/UserModel';
 
 export default class LoginService {
   constructor(private userModel = new UserModel()) { }
@@ -14,7 +14,7 @@ export default class LoginService {
     const user = await this.userModel.findByEmail({ email });
 
     if (!user || !LoginService.comparePass(password, user.password)) {
-      throw new ApiError(StatusCodes.BAD_REQUEST, 'Invalid email or password');
+      throw new Error(StatusCodes.BAD_REQUEST, 'Invalid email or password');
     }
 
     return LoginService.generateToken({ id: user.id, email: user.email });
