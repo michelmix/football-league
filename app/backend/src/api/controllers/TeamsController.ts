@@ -1,21 +1,41 @@
 import { Request, Response } from 'express';
-import IServiceTeam from '../interfaces/IServiceTeam';
+import TeamsService from '../services/TeamsService';
+// import IServiceTeam from '../interfaces/IServiceTeam';
 
 export default class TeamsController {
-  private _service: IServiceTeam;
+  private teamsService: TeamsService;
 
-  constructor(service: IServiceTeam) {
-    this._service = service;
+  constructor() {
+    this.teamsService = new TeamsService();
   }
 
-  async getAll(_req: Request, res: Response) {
-    const result = await this._service.getAll();
-    return res.status(200).json(result);
-  }
+  public getAll = async (_req: Request, res: Response) => {
+    const teams = await this.teamsService.getAll();
+    res.status(200).json(teams);
+  };
 
-  async getById(req: Request, res: Response) {
+  public getById = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const team = await this._service.getById(+id);
-    return res.status(200).json(team);
-  }
+    const team = await this.teamsService.getById(+id);
+    res.status(200).json(team);
+  };
 }
+
+// export default class TeamsController {
+//   private teamsService: TeamsService;
+
+//   constructor() {
+//     this.teamsService = new TeamsService();
+//   }
+
+//   async getAll(_req: Request, res: Response) {
+//     const result = await this.teamsService.getAll();
+//     return res.status(200).json(result);
+//   }
+
+//   async getById(req: Request, res: Response) {
+//     const { id } = req.params;
+//     const team = await this.teamsService.getById(+id);
+//     return res.status(200).json(team);
+//   }
+// }

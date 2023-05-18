@@ -9,7 +9,7 @@ export default class TeamsService implements IServiceTeam {
 
   async getAll(): Promise<ITeam[]> {
     const allTeams = await this.model.findAll();
-    if (!allTeams) throw new Error('Falha ao buscar todos os times');
+    // if (!allTeams) throw new Error('Falha ao buscar todos os times');
     return allTeams;
   }
 
