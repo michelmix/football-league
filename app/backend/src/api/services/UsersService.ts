@@ -1,18 +1,17 @@
-// import IEmail from '../interfaces/IEmail';
-import { StatusCodes } from 'http-status-codes';
-import User from '../../database/models/UsersModel';
-import UserModel from '../../models/UserModel';
-import IId from '../interfaces/IId';
-import ApiError from '../../utils/Error';
+import { ModelStatic } from 'sequelize';
+import UsersModel from '../../database/models/UsersModel';
+import ILogin from '../interfaces/ILogin';
 
-export default class UsersService {
-  constructor(private _userModel = new UserModel()) {}
+class UsersService {
+  private _usersModel: ModelStatic<UsersModel> = UsersModel;
 
-  async findById({ id }: IId) {
-    const user = await this._userModel.findById(id) as User;
-
-    if (!user) throw new ApiError(StatusCodes.NOT_FOUND, 'User not found');
-
-    return user;
+  public async login(user: ILogin) {
+    const { email } = user;
+    const result = await this._usersModel.findOne({
+      where: { email },
+    });
+    return result;
   }
 }
+
+export default UsersService;

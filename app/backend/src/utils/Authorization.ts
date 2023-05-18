@@ -1,17 +1,11 @@
 import * as jwt from 'jsonwebtoken';
+import Ilogin from '../api/interfaces/ILogin';
 
-export default class Authorization {
-  private _secret = process.env.JWT_SECRET || 'secret';
+const secret: string = process.env.JWT_SECRET || 'secret';
 
-  constructor(private _jwt = jwt) {}
+export const generateToken = (user: Ilogin) => jwt.sign({ user }, secret, {
+  algorithm: 'HS256',
+  expiresIn: '5d',
+});
 
-  public generateToken(data: object): string {
-    return this._jwt.sign(data, this._secret, { expiresIn: '1d' });
-  }
-
-  public verifyToken(token: string): object {
-    const data = this._jwt.verify(token, this._secret);
-
-    return typeof data === 'string' ? JSON.parse(data) : data;
-  }
-}
+export const verifyToken = (token: string) => jwt.verify(token, secret);

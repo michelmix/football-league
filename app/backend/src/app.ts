@@ -3,8 +3,6 @@ import 'express-async-errors';
 // import teamsRoutes from './api/routes/TeamsRoutes';
 import router from './api/routes';
 // import middlewareHandler from './middlewares/middlewareHandler';
-// import MiddlewareErros from './utils/MiddlewareErros';
-// import genericError from './utils/genericError';
 
 class App {
   public app: express.Express;
@@ -17,7 +15,6 @@ class App {
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
     this.app.use(this.routers);
-    // this.app.use(genericError);
   }
 
   private config():void {
