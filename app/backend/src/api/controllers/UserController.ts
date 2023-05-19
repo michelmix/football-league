@@ -27,11 +27,11 @@ class UsersController {
     return res.status(200).json({ token });
   };
 
-  // public loginRole = async (req: Request, res: Response): Promise<Response> => {
-  //   const { role } = req.body.userToken.user;
+  public loginRole = async (req: Request, res: Response): Promise<Response> => {
+    const { role } = req.body.userToken.user;
 
-  //   return res.status(200).json({ role });
-  // };
+    return res.status(200).json({ role });
+  };
 }
 
 export default UsersController;

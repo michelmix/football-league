@@ -1,28 +1,28 @@
-// import { Request, Response } from 'express';
-// import ILogin from '../interfaces/ILogin';
-// import LoginService from '../services/LoginService';
-// import UsersService from '../services/UsersService';
-// // import IRequestWithUser from '../interfaces/IRequestWithUser';
+import { Request, Response } from 'express';
+import ILogin from '../interfaces/ILogin';
+import LoginService from '../services/LoginService';
+import UsersService from '../services/UsersService';
+// import IRequestWithUser from '../interfaces/IRequestWithUser';
 
-// export default class LoginController {
-//   constructor(
-//     private _loginService = new LoginService(),
-//     private _userService = new UsersService(),
-//   ) {}
+export default class LoginController {
+  constructor(
+    private _loginService = new LoginService(),
+    private _userService = new UsersService(),
+  ) {}
 
-//   async login(req: Request, res: Response) {
-//     const { email, password } = req.body as ILogin;
+  async login(req: Request, res: Response) {
+    const { email, password } = req.body as ILogin;
 
-//     const token = await this._loginService.login({ email, password });
+    const token = await this._loginService.login({ email, password });
 
-//     return res.json({ token });
-//   }
+    return res.json({ token });
+  }
 
-//   // async findRole(req: IRequestWithUser, res: Response) {
-//   //   const { id } = req.user || { id: 0 };
+  // async findRole(req: IRequestWithUser, res: Response) {
+  //   const { id } = req.user || { id: 0 };
 
-//   //   const { role } = await this._userService.findById({ id });
+  //   const { role } = await this._userService.findById({ id });
 
-//   //   return res.json({ role });
-//   // }
-// }
+  //   return res.json({ role });
+  // }
+}

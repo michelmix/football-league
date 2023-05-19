@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import Authorization from '../utils/Authorization';
+import { verifyToken } from '../utils/Authorization';
 
 export default (req: Request, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
@@ -13,7 +13,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     [, auth] = auth.split(' ');
   }
 
-  const token = new Authorization().verifyToken(auth);
+  const token = verifyToken(auth);
 
   Object.defineProperty(req, 'user', { value: token });
 
