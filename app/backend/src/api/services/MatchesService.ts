@@ -29,7 +29,7 @@ export default class MatchesService {
     return matches;
   }
 
-  public async finishMatch(id: number) {
+  public async finishedMatch(id: number) {
     await this._matchesModel.update(
       { inProgress: 'false' },
       { where: { id } },
