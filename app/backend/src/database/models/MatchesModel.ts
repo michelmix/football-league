@@ -2,7 +2,7 @@ import { DataTypes, Model } from 'sequelize';
 import db from '.';
 import TeamsModel from './TeamsModel';
 
-class MatchesModel extends Model {
+export default class MatchesModel extends Model {
   declare id: number;
   declare homeTeamId: number;
   declare homeTeamGoals: number;
@@ -60,5 +60,3 @@ MatchesModel.init({
 
 MatchesModel.belongsTo(TeamsModel, { foreignKey: 'homeTeamId', as: 'homeTeam' });
 MatchesModel.belongsTo(TeamsModel, { foreignKey: 'awayTeamId', as: 'awayTeam' });
-
-export default MatchesModel;
