@@ -1,7 +1,7 @@
 import { ModelStatic } from 'sequelize';
 import TeamsModel from '../../database/models/TeamsModel';
 import MatchesModel from '../../database/models/MatchesModel';
-// import IMatches from '../interfaces/IMatch';
+import IMatches from '../interfaces/IMatch';
 
 export default class MatchesService {
   private _matchesModel: ModelStatic<MatchesModel> = MatchesModel;
@@ -46,12 +46,11 @@ export default class MatchesService {
     );
   }
 
-  //   public async createMatch(match : Omit<IMatches, 'id' | 'inProgress'>) {
-  //     const matchCreated = await this._matchesModel.create({
-  //       ...match,
-  //       inProgress: true,
-  //     });
-  //     return matchCreated;
-  //   }
-  // }
+  public async creatingMatch(match: Omit<IMatches, 'id' | 'inProgress'>) {
+    const createdMatch = await this._matchesModel.create({
+      ...match,
+      inProgress: true,
+    });
+    return createdMatch;
+  }
 }

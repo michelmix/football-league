@@ -30,4 +30,9 @@ export default class MatchesController {
     await this.matchesService.updateMatch(+id, homeTeamGoals, awayTeamGoals);
     res.status(200).json({ message: 'Match updated!' });
   };
+
+  public creatingMatch = async (req: Request, res: Response) => {
+    const matchCreated = await this.matchesService.creatingMatch(req.body);
+    res.status(201).json(matchCreated);
+  };
 }
