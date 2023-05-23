@@ -1,10 +1,9 @@
 import { ModelStatic } from 'sequelize';
-
 import Teams from '../../database/models/TeamsModel';
-import IServiceTeam from '../interfaces/IServiceTeam';
+
 import ITeam from '../interfaces/ITeam';
 
-export default class TeamsService implements IServiceTeam {
+export default class TeamsService {
   protected model: ModelStatic<Teams> = Teams;
 
   async getAll(): Promise<ITeam[]> {
@@ -13,9 +12,10 @@ export default class TeamsService implements IServiceTeam {
     return allTeams;
   }
 
-  async getById(id: number): Promise<ITeam> {
-    const team = await this.model.findByPk(id);
-    if (!team) throw new Error('Falha ao buscar time by id');
+  async getById(id: string): Promise<ITeam | null> {
+    const team = await this.model.findOne({
+      where: { id },
+    });
     return team;
   }
 }
