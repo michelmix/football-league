@@ -36,13 +36,15 @@ export default class MatchesService {
     );
   }
 
-  //   public async updateMatch(id: number, homeTeamGoals: number, awayTeamGoals: number) {
-  //     await this._matchesModel.update(
-  //       { homeTeamGoals,
-  //         awayTeamGoals },
-  //       { where: { id } },
-  //     );
-  //   }
+  public async updateMatch(id: number, homeTeamGoals: number, awayTeamGoals: number) {
+    await this._matchesModel.update(
+      {
+        homeTeamGoals,
+        awayTeamGoals,
+      },
+      { where: { id } },
+    );
+  }
 
   //   public async createMatch(match : Omit<IMatches, 'id' | 'inProgress'>) {
   //     const matchCreated = await this._matchesModel.create({
