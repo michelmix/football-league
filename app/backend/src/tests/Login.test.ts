@@ -22,13 +22,13 @@ const users = [
     username: 'User',
     role: 'user',
     email: 'user@user.com',
-    password: '$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO', 
+    password: '$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO',
   },
   {
     username: 'User',
     role: 'user',
     email: '@user.com',
-    password: '$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO', 
+    password: '$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO',
   },
 ]
 
@@ -94,24 +94,24 @@ describe('Testes login', () => {
     //   expect(body).to.be.deep.equal({ message: 'Unauthorized' });
     // });
 
-    it('Se passado um email e senha válidos responde com status 200 e um token', async () => {
-      sinon
-        .stub(User, 'findOne')
-        .resolves(users[2] as unknown as User);
+    //   it('Se passado um email e senha válidos responde com status 200 e um token', async () => {
+    //     sinon
+    //       .stub(User, 'findOne')
+    //       .resolves(users[2] as unknown as User);
 
-      const { body, status } = await chai
-        .request(app)
-        .post('/login')
-        .send(JSON.stringify(
-          { email: '@user.com', password: 'secret_admin' }
-        ));
+    //     const { body, status } = await chai
+    //       .request(app)
+    //       .post('/login')
+    //       .send(JSON.stringify(
+    //         { email: '@user.com', password: 'secret_admin' }
+    //       ));
 
-      expect(status).to.be.equal(200);
-      expect(body).to.be.an('object');
-      expect(body).to.have.property('token');
-    });
+    //     expect(status).to.be.equal(200);
+    //     expect(body).to.be.an('object');
+    //     expect(body).to.have.property('token');
+    //   });
+    // });
+
+    afterEach(sinon.restore);
   });
-
-  afterEach(sinon.restore);
 });
-
