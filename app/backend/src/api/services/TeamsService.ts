@@ -1,6 +1,6 @@
 import { ModelStatic } from 'sequelize';
-import Teams from '../../database/models/TeamsModel';
 
+import Teams from '../../database/models/TeamsModel';
 import ITeam from '../interfaces/ITeam';
 
 export default class TeamsService {
@@ -16,6 +16,7 @@ export default class TeamsService {
     const team = await this.model.findOne({
       where: { id },
     });
+    // // if (!team) throw new Error('Falha ao buscar time by id');
     return team;
   }
 }
