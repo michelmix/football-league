@@ -6,6 +6,11 @@ export default class Teams extends Model {
   declare teamName: string;
 }
 
+export interface TeamAtributes {
+  id: number,
+  teamName: string,
+}
+
 Teams.init({
   id: {
     allowNull: false,
