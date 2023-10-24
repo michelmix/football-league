@@ -1,3 +1,5 @@
+// Mudei o código para não precisar mais desse arquivo
+
 // import { StatusCodes } from 'http-status-codes';
 // import { hashSync, compareSync } from 'bcryptjs';
 // import { sign } from 'jsonwebtoken';

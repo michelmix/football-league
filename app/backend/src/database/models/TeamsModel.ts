@@ -1,30 +1,29 @@
-import { Model, INTEGER, STRING } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import db from '.';
 
-export default class Teams extends Model {
-  declare readonly id: number;
-  declare teamName: string;
-}
-
-export interface TeamAtributes {
+export interface teamsAttributes {
   id: number,
   teamName: string,
 }
+export default class TeamsModel extends Model<teamsAttributes> {
+  declare id: number;
+  declare teamName: string;
+}
 
-Teams.init({
+TeamsModel.init({
   id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: INTEGER,
+    type: DataTypes.INTEGER,
   },
   teamName: {
     allowNull: false,
-    type: STRING(255),
+    type: DataTypes.STRING,
   },
 }, {
   sequelize: db,
-  underscored: true,
-  timestamps: false,
   modelName: 'teams',
+  timestamps: false,
+  underscored: true,
 });

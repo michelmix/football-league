@@ -1,10 +1,12 @@
 import { Router } from 'express';
-import LeaderboardController from '../controllers/LeaderboardController';
+import LearderBoardController from '../controllers/LeaderboardController';
 
-const leaderboardRoutes = Router();
+const leaderBoardRouter = Router();
 
-const leaderboardController = new LeaderboardController();
+leaderBoardRouter.get('/home', (req, res) => LearderBoardController.getAllHomeStats(req, res));
 
-leaderboardRoutes.get('/home', leaderboardController.getHomeTeams);
+leaderBoardRouter.get('/away', (req, res) => LearderBoardController.getAllAwayStats(req, res));
 
-export default leaderboardRoutes;
+leaderBoardRouter.get('/', (req, res) => LearderBoardController.getAllTeams(req, res));
+
+export default leaderBoardRouter;

@@ -1,3 +1,5 @@
+// Mudei o código para não precisar mais desse arquivo
+
 // import { Request, Response } from 'express';
 // import ILogin from '../interfaces/ILogin';
 // import LoginService from '../services/LoginService';

@@ -1,20 +1,23 @@
 import * as express from 'express';
-import 'express-async-errors';
-// import teamsRoutes from './api/routes/TeamsRoutes';
-import router from './api/routes';
-// import middlewareHandler from './middlewares/middlewareHandler';
+import teamRouter from './api/routes/TeamsRoutes';
+import matchRouter from './api/routes/MatchesRoutes';
+import leaderBoardRouter from './api/routes/LeaderboardRoutes';
+import userRouter from './api/routes/UsersRoutes';
 
 class App {
   public app: express.Express;
 
-  constructor(private routers = router) {
+  constructor(
+    private team = teamRouter,
+    private user = userRouter,
+    private match = matchRouter,
+    private board = leaderBoardRouter,
+  ) {
     this.app = express();
 
     this.config();
-
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
-    this.app.use(this.routers);
   }
 
   private config():void {
@@ -27,7 +30,12 @@ class App {
 
     this.app.use(express.json());
     this.app.use(accessControl);
-    // this.app.use(teamsRoutes);
+    this.app.use('/teams', this.team);
+    this.app.use('/teams/:id', this.team);
+    this.app.use('/login/role', this.user);
+    this.app.use('/login', this.user);
+    this.app.use('/matches', this.match);
+    this.app.use('/leaderBoard', this.board);
   }
 
   public start(PORT: string | number):void {

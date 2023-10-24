@@ -1,38 +1,58 @@
 import { Request, Response } from 'express';
-import MatchesService from '../services/MatchesService';
+import MatchService from '../services/MatcheService';
 
-export default class MatchesController {
-  private matchesService: MatchesService;
-
-  constructor() {
-    this.matchesService = new MatchesService();
+async function findMatches(req: Request, res: Response) {
+  const { inProgress } = req.query;
+  if (typeof inProgress === 'string') {
+    const inProgressMatches = await MatchService.allInProgress(inProgress);
+    return res.status(200).json(inProgressMatches);
   }
-
-  public getAll = async (req: Request, res: Response) => {
-    const { inProgress } = req.query;
-    if (inProgress === undefined) {
-      const matches = await this.matchesService.getAll();
-      return res.status(200).json(matches);
-    }
-    const matches = await this.matchesService.getMatchesInProgress(inProgress === 'true');
-    return res.status(200).json(matches);
-  };
-
-  public finishedMatch = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    await this.matchesService.finishedMatch(+id);
-    res.status(200).json({ message: 'Finished' });
-  };
-
-  public updateMatch = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const { homeTeamGoals, awayTeamGoals } = req.body;
-    await this.matchesService.updateMatch(+id, homeTeamGoals, awayTeamGoals);
-    res.status(200).json({ message: 'Match updated!' });
-  };
-
-  public creatingMatch = async (req: Request, res: Response) => {
-    const matchCreated = await this.matchesService.creatingMatch(req.body);
-    res.status(201).json(matchCreated);
-  };
+  const allMatches = await MatchService.findAllMatches();
+  return res.status(200).json(allMatches);
 }
+
+async function finishMatch(req: Request, res: Response) {
+  // const { authorization } = req.headers;
+  const { id } = req.params;
+  // if (!authorization) {
+  //   return res.status(401).json({ message: 'Token not found' });
+  // }
+
+  // if (!id) {
+  //   return res.status(401).json({ message: 'Id not found' });
+  // }
+
+  const result = await MatchService.finishMatch(Number(id));
+
+  return res.status(200).json(result);
+}
+
+async function updateMatchScore(req: Request, res: Response) {
+  const { id } = req.params;
+  const { awayTeamGoals, homeTeamGoals } = req.body;
+  const result = await MatchService.updateMatchScore(Number(id), awayTeamGoals, homeTeamGoals);
+  if (!result) {
+    return res.status(401).json(result);
+  }
+  return res.status(200).json(result);
+}
+
+async function createNewMatch(req: Request, res: Response) {
+  const newMatch = await MatchService.createNewMatch(req.body);
+
+  if ('message' in newMatch) {
+    return res.status(404).json({ message: newMatch.message });
+  }
+  if (newMatch.awayTeamId === newMatch.homeTeamId) {
+    return res.status(422)
+      .json({ message: 'It is not possible to create a match with two equal teams' });
+  }
+  return res.status(201).json(newMatch);
+}
+
+export default {
+  findMatches,
+  finishMatch,
+  updateMatchScore,
+  createNewMatch,
+};

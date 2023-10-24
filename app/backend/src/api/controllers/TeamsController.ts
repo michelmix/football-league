@@ -1,41 +1,21 @@
 import { Request, Response } from 'express';
-import TeamsService from '../services/TeamsService';
-// import IServiceTeam from '../interfaces/IServiceTeam';
+import TeamsService from '../services/TeamService';
 
-export default class TeamsController {
-  private teamsService: TeamsService;
-
-  constructor() {
-    this.teamsService = new TeamsService();
-  }
-
-  public getAll = async (_req: Request, res: Response) => {
-    const teams = await this.teamsService.getAll();
-    res.status(200).json(teams);
-  };
-
-  public getById = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const team = await this.teamsService.getById(id);
-    res.status(200).json(team);
-  };
+async function findAll(_req: Request, res: Response) {
+  const allTeams = await TeamsService.findAll();
+  return res.status(200).json(allTeams);
 }
 
-// export default class TeamsController {
-//   private teamsService: TeamsService;
+async function findById(req: Request, res: Response) {
+  const { id } = req.params;
+  const teamById = await TeamsService.findById(Number(id));
+  if (!teamById) {
+    return res.status(401).json(teamById);
+  }
+  return res.status(200).json(teamById);
+}
 
-//   constructor() {
-//     this.teamsService = new TeamsService();
-//   }
-
-//   async getAll(_req: Request, res: Response) {
-//     const result = await this.teamsService.getAll();
-//     return res.status(200).json(result);
-//   }
-
-//   async getById(req: Request, res: Response) {
-//     const { id } = req.params;
-//     const team = await this.teamsService.getById(+id);
-//     return res.status(200).json(team);
-//   }
-// }
+export default {
+  findAll,
+  findById,
+};

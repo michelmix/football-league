@@ -1,17 +1,25 @@
 import { Request, Response } from 'express';
-import LeaderboardService from '../services/LeaderboardService';
+import LeaderBoardService from '../services/LeaderboardService';
 
-class LeaderboardController {
-  private leaderboardService: LeaderboardService;
-
-  constructor() {
-    this.leaderboardService = new LeaderboardService();
-  }
-
-  public getHomeTeams = async (_req: Request, res: Response) => {
-    const leadboard = await this.leaderboardService.getHomeLeaderboard();
-    res.status(200).json(leadboard);
-  };
+async function getAllHomeStats(_req: Request, res: Response) {
+  const matchStats = await LeaderBoardService.sortAllStats('home');
+  return res.status(200).json(matchStats);
 }
 
-export default LeaderboardController;
+async function getAllAwayStats(_req: Request, res: Response) {
+  const matchStats = await LeaderBoardService.sortAllStats('away');
+  return res.status(200).json(matchStats);
+}
+
+async function getAllTeams(_req: Request, res: Response) {
+  const homeTeams = await LeaderBoardService.sortAllStats('home');
+  const awayTeams = await LeaderBoardService.sortAllStats('away');
+  const allTeams = await LeaderBoardService.allTeamsStats([...homeTeams, ...awayTeams]);
+  return res.status(200).json(allTeams);
+}
+
+export default {
+  getAllHomeStats,
+  getAllAwayStats,
+  getAllTeams,
+};

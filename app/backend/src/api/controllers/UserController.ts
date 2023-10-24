@@ -1,37 +1,24 @@
 import { Request, Response } from 'express';
-import * as bcrypt from 'bcryptjs';
-import { generateToken } from '../../utils/Authorization';
-import UsersService from '../services/UsersService';
+import UserService from '../services/UsersService';
+import { Authenticate } from '../../middlewares/tokenMiddleware';
 
-class UsersController {
-  private usersService: UsersService;
-
-  constructor() {
-    this.usersService = new UsersService();
-  }
-
-  public login = async (req: Request, res: Response): Promise<Response> => {
-    const { email, password } = req.body;
-    const user = await this.usersService.login({ email, password });
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
-
-    const matchPassword = bcrypt.compareSync(password, user?.password || '');
-
-    if (!matchPassword) {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
-
-    const token = generateToken(user);
-    return res.status(200).json({ token });
-  };
-
-  public findRole = async (req: Request, res: Response): Promise<Response> => {
-    const { role } = req.body.userToken.user;
-
-    return res.status(200).json({ role });
-  };
+async function userLogin(req: Request, res: Response) {
+  const { email, password } = req.body;
+  const token = await UserService.userLogin(email, password);
+  if (typeof token !== 'string') return res.status(401).json(token);
+  return res.status(200).json({ token });
 }
 
-export default UsersController;
+async function userRole(req: Request, res: Response) {
+  const { email } = (req as Authenticate).authorization;
+  const role = await UserService.userRole(email);
+  if (typeof role !== 'string') {
+    return res.status(404).json(role);
+  }
+  return res.status(200).json({ role });
+}
+
+export default {
+  userLogin,
+  userRole,
+};

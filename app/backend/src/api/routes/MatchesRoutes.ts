@@ -1,21 +1,26 @@
-import { Router, Request, Response } from 'express';
-import checkToken from '../../middlewares/tokenValidation';
-import MatchesController from '../controllers/MatchesController';
-import MatchesValidation from '../../middlewares/matchesValidation';
+import { Router } from 'express';
+import MatchController from '../controllers/MatchesController';
+import TokenMiddleware from '../../middlewares/tokenMiddleware';
 
-const matchesRoutes = Router();
-const matchesController = new MatchesController();
-const matchesValidation = new MatchesValidation();
+const matchRouter = Router();
 
-matchesRoutes.get('/', (req: Request, res: Response) => matchesController.getAll(req, res));
-matchesRoutes.patch('/:id/finish', checkToken, matchesController.finishedMatch);
-matchesRoutes.patch('/:id', checkToken, matchesController.updateMatch);
+matchRouter.get('/', MatchController.findMatches);
 
-matchesRoutes.post(
+matchRouter.post(
   '/',
-  checkToken,
-  matchesValidation.verifyParams,
-  matchesController.creatingMatch,
+  (req, res, next) => TokenMiddleware(req, res, next),
+  (req, res) => MatchController.createNewMatch(req, res),
 );
 
-export default matchesRoutes;
+matchRouter.patch(
+  '/:id/finish',
+  (req, res, next) => TokenMiddleware(req, res, next),
+  (req, res) => MatchController.finishMatch(req, res),
+);
+matchRouter.patch(
+  '/:id',
+  (req, res, next) => TokenMiddleware(req, res, next),
+  (req, res) => MatchController.updateMatchScore(req, res),
+);
+
+export default matchRouter;
