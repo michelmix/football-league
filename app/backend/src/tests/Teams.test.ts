@@ -1,79 +1,68 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
+import TeamsService from '../api/services/TeamService';
+import teamMock from './mocks/teams.mock';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
-import TeamModel, { TeamAtributes } from '../database/models/TeamsModel';
-
 import { Response } from 'superagent';
+import TeamsModel from '../database/models/TeamsModel';
+
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
-
-describe('Teams Router', () => {
+// arrange => a given context
+// act => test a code
+// assert => expect a rusult
+// TDD => red --- green --- refactor
+describe('Teams Model, Service, Controller and Route tests', () => {
   afterEach(() => {
-    sinon.restore();
-  });
-  describe('GET /teams', () => {
-    let chaiHttpResponse: Response;
-    it('Deve retornar 200 e os times', async () => {
-      sinon.stub(TeamModel, 'findAll').resolves([
-        {
-          id: 1,
-          teamName: "Avaí/Kindermann"
-        },
-      ] as TeamModel[])
+    sinon.restore()
+  })
+  describe('Tests "findAll" for teams', () => {
+    it('Returns an empty array', async () => {
+      sinon.stub(TeamsModel, 'findAll').resolves([]);
 
-      chaiHttpResponse = await chai.request(app)
-          .get('/teams');
+      const teams = await TeamsService.findAll();
 
-        // assert => espero um resultado
-        expect(chaiHttpResponse.status).to.be.equal(200);
-        expect(chaiHttpResponse.body).to.be.deep.equal([
-          {
-            id: 1,
-            teamName: "Avaí/Kindermann"
-          },
-        ]);
+      expect(teams).to.be.deep.equal([]);
     });
-  });
-    describe('GET /teams:id', () => {
-      let chaiHttpResponse: Response;
-      it('Deve retornar 404 e uma mensagem de error', async () => {
-        sinon.stub(TeamModel, 'findOne').resolves(undefined)
+    it('Returns * in teams Table', async () => {
+      sinon.stub(TeamsModel, 'findAll').resolves(teamMock);
 
-        chaiHttpResponse = await chai.request(app)
-            .get('/teams/99');
+      const teams = await TeamsService.findAll();
 
-          // assert => espero um resultado
-          expect(chaiHttpResponse.status).to.be.equal(404);
-          expect(chaiHttpResponse.body).to.be.deep.equal(
-            {
-              message: "Team not found!"
-            },
-          );
-      });
+      expect(teams).to.be.deep.equal(teamMock);
+    });
+    it('expects a status 200', async () => {
+     const response = await chai.request(app)
+     .get('/teams')
+     expect(response.status).to.be.equal(200);
+    })
+  })
+  describe('Tests "findById" for teams', () => {
 
-      it('Deve retornar 200 e o time', async () => {
-        sinon.stub(TeamModel, 'findOne').resolves(
-          {
-            id: 1,
-            teamName: "Avaí/Kindermann"
-          } as TeamModel)
+    it('Returns a specific team using id', async () => {
+       sinon.stub(TeamsModel, 'findByPk').resolves({ id: 5, teamName: 'Cruzeiro' } as TeamsModel)
+       const response = await TeamsService.findById(5);
 
-        chaiHttpResponse = await chai.request(app)
-            .get('/teams/1');
+       expect(response).to.be.deep.equal({ id: 5, teamName: 'Cruzeiro' })
+    })
+    it('Return the correct status with GET /team/:id', async () => {
+      sinon.stub(TeamsService, 'findById').resolves({ id: 5, teamName: 'Cruzeiro' } as TeamsModel);
 
-          // assert => espero um resultado
-          expect(chaiHttpResponse.status).to.be.equal(200);
-          expect(chaiHttpResponse.body).to.be.deep.equal(
-            {
-              id: 1,
-              teamName: "Avaí/Kindermann"
-            },
-          );
-      });
+      const response = await chai.request(app)
+      .get('/teams/:id');
+
+      expect(response.status).to.be.equal(200);
+    })
+    it('Returns an Error message if id is not found', async () => {
+      sinon.stub(TeamsModel, 'findByPk').resolves(undefined);
+      const response = await TeamsService.findById(100);
+
+      expect(response).to.be.deep.equal({ message: 'Team not found'});
+    })
   })
 });
