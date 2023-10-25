@@ -44,6 +44,8 @@ O Football League é um site informativo sobre partidas e classificações de fu
   ```
 - Agora basta acessar o endereço `localhost:3000/login` onde está mapeado o Frontend da aplicação e logar com o usuário: `user@user.com` e senha: `secret_user`, para assim ter acesso a rotas que necessitam autenticação.
 
+ATENÇÃO: Apenas algumas funcionalidades estão implementadas no front-end
+
 <br> 
 
 ## Endpoints
